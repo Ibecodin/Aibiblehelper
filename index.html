@@ -1,0 +1,35 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AI Prompt Interface</title>
+</head>
+<body>
+  <h1>Ask the AI</h1>
+  <textarea id="prompt" rows="5" cols="50" placeholder="Type your prompt here..."></textarea>
+  <br>
+  <button onclick="sendPrompt()">Send</button>
+  <h3>Response:</h3>
+  <pre id="response"></pre>
+
+  <script>
+    async function sendPrompt() {
+      const prompt = document.getElementById("prompt").value;
+      const responseEl = document.getElementById("response");
+      responseEl.textContent = "Loading...";
+      try {
+        const res = await fetch("http://localhost:5000/api/prompt", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ prompt })
+        });
+        const data = await res.json();
+        responseEl.textContent = data.response;
+      } catch (err) {
+        responseEl.textContent = "Error: " + err.message;
+      }
+    }
+  </script>
+</body>
+</html>
